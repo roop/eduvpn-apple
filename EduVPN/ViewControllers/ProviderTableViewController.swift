@@ -18,6 +18,7 @@ class ProviderTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var providerImageView: UIImageView!
     @IBOutlet private weak var providerTitleLabel: UILabel!
+    @IBOutlet private weak var motdLabel: UILabel!
     @IBOutlet private weak var statusImageView: UIImageView!
 
     func configure(with instance: Instance, and providerType: ProviderType, displayConnectedStatus: Bool) {
@@ -61,6 +62,16 @@ class ProviderTableViewCell: UITableViewCell {
             providerImageView.isHidden = true
         }
         providerTitleLabel?.text = instance.displayNames?.localizedValue ?? instance.baseUri
+        if instance.apis?.count == 1, let motd = instance.apis?.first?.motd {
+            motdLabel?.text = motd
+            motdLabel?.isHidden = false
+        } else {
+            motdLabel?.text = nil
+            motdLabel?.isHidden = true
+        }
+
+        layoutIfNeeded()
+
     }
 }
 
@@ -73,6 +84,7 @@ protocol ProviderTableViewControllerDelegate: class {
     func settings(providerTableViewController: ProviderTableViewController)
     func delete(instance: Instance)
     func noProfiles(providerTableViewController: ProviderTableViewController)
+    func refreshSystemMessages()
 }
 
 class ProviderTableViewController: UITableViewController {
@@ -128,6 +140,7 @@ class ProviderTableViewController: UITableViewController {
     @objc func refresh() {
         do {
             try fetchedResultsController.performFetch()
+            delegate?.refreshSystemMessages()
         } catch {
             os_log("Failed to fetch objects: %{public}@", log: Log.general, type: .error, error.localizedDescription)
         }
@@ -135,6 +148,8 @@ class ProviderTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         tableView.tableFooterView = UIView()
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 100
 
         super.viewDidLoad()
 

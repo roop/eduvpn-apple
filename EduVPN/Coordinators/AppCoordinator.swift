@@ -633,7 +633,7 @@ class AppCoordinator: RootViewCoordinator {
         return false
     }
 
-    fileprivate func systemMessages(for dynamicApiProvider: DynamicApiProvider) -> Promise<SystemMessages> {
+    fileprivate func systemMessages(forProvider dynamicApiProvider: DynamicApiProvider) -> Promise<SystemMessages> {
         return dynamicApiProvider.request(apiService: .systemMessages).then { response -> Promise<SystemMessages> in
             return response.mapResponse()
         }
@@ -778,6 +778,28 @@ extension AppCoordinator: ProfilesViewControllerDelegate {
 extension AppCoordinator: ProviderTableViewControllerDelegate {
     func noProfiles(providerTableViewController: ProviderTableViewController) {
         addProfilesWhenNoneAvailable()
+    }
+
+    func refreshSystemMessages() {
+        let context = self.persistentContainer.newBackgroundContext()
+        context.perform {
+            do {
+                let apis = try Api.allInContext(context)
+
+                apis.forEach {
+                    if let provider = DynamicApiProvider(api: $0) {
+                        _ = self.systemMessages(forProvider: provider).then { (systemMessages) -> Promise<Void> in
+                            context.performAndWait {
+                                provider.api.motd = systemMessages.displayString
+                                context.saveContextToStore()
+                            }
+                            return Promise.value(())
+                        }
+                    }
+                }
+            } catch {
+            }
+        }
     }
 
     func addProvider(providerTableViewController: ProviderTableViewController) {
@@ -941,6 +963,6 @@ extension AppCoordinator: VPNConnectionViewControllerDelegate {
             return Promise(error: AppCoordinatorError.apiProviderCreateFailed)
         }
 
-        return self.systemMessages(for: dynamicApiProvider)
+        return self.systemMessages(forProvider: dynamicApiProvider)
     }
 }

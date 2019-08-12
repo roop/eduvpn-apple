@@ -22,6 +22,7 @@ extension Api {
     }
 
     @NSManaged public var apiBaseUri: String?
+    @NSManaged public var motd: String?
     @NSManaged public var instance: Instance?
     @NSManaged public var profiles: Set<Profile>
     @NSManaged public var authServer: AuthServer?

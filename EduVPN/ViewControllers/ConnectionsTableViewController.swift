@@ -14,6 +14,7 @@ class ConnectTableViewCell: UITableViewCell {
     @IBOutlet private weak var connectImageView: UIImageView!
     @IBOutlet private weak var connectTitleLabel: UILabel!
     @IBOutlet private weak var connectSubTitleLabel: UILabel!
+    @IBOutlet private weak var motdLabel: UILabel!
     @IBOutlet private weak var statusImageView: UIImageView!
 
     func configure(with profile: Profile) {
@@ -35,6 +36,13 @@ class ConnectTableViewCell: UITableViewCell {
 
         connectTitleLabel?.text = profile.displayNames?.localizedValue ?? profile.displayString ?? profile.profileId
         connectSubTitleLabel?.text = profile.displayString
+        if let motd = profile.api?.motd {
+            motdLabel?.text = motd
+            motdLabel?.isHidden = false
+        } else {
+            motdLabel?.text = nil
+            motdLabel?.isHidden = true
+        }
         if let logo = profile.api?.instance?.logos?.localizedValue, let logoUri = URL(string: logo) {
             connectImageView?.af_setImage(withURL: logoUri)
             connectImageView.isHidden = false
@@ -44,6 +52,7 @@ class ConnectTableViewCell: UITableViewCell {
             connectImageView.isHidden = true
         }
 
+        layoutIfNeeded()
     }
 }
 
@@ -81,6 +90,8 @@ class ConnectionsTableViewController: UITableViewController {
         super.viewDidLoad()
 
         tableView.tableFooterView = UIView()
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 100
         refresh()
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
