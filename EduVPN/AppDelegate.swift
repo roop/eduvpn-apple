@@ -185,15 +185,6 @@ extension AppDelegate {
         ])
     }
 
-    @objc func newDocument(_ sender: Any) {
-        guard let navigationController = environment?.navigationController else {
-            return
-        }
-        if navigationController.isToolbarLeftButtonShowsAddServerUI {
-            navigationController.toolbarLeftButtonClicked(self)
-        }
-    }
-
     @IBAction func importOpenVPNConfig(_ sender: Any) {
         guard let mainWindow = mainWindow else { return }
         guard let persistenceService = environment?.persistenceService else { return }
@@ -272,6 +263,10 @@ extension AppDelegate {
         environment?.navigationController?.topViewController as? MenuCommandResponding
     }
 
+    @IBAction func addNewServer(_ sender: Any?) {
+        topVC?.addNewServer()
+    }
+
     @IBAction func goNextServer(_ sender: Any?) {
         topVC?.goNextServer()
     }
@@ -304,7 +299,7 @@ extension AppDelegate {
 extension AppDelegate: NSMenuItemValidation {
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         if menuItem.identifier == NSUserInterfaceItemIdentifier("addNewServer") {
-            return environment?.navigationController?.isToolbarLeftButtonShowsAddServerUI ?? false
+            return topVC?.canAddNewServer() ?? false
         } else if menuItem.identifier == NSUserInterfaceItemIdentifier("goNextServer") {
             return topVC?.canGoNextServer() ?? false
         } else if menuItem.identifier == NSUserInterfaceItemIdentifier("goPreviousServer") {
