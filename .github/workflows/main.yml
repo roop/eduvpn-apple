@@ -17,14 +17,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Changelog Reminder
-        uses: Zomzog/changelog-checker@v1.2.0
+      - name: Check for update to CHANGES.md
+        uses: brettcannon/check-for-changed-files@v1
         with:
-          fileName: CHANGES.md
-          noChangelogLabel: 'Make sure to keep CHANGES.md up to date!'
-          checkNotification: Simple
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          file-pattern: "CHANGES.md"
+          failure-message: "CHANGES.md is not updated"
 
   SwiftLint:
     runs-on: ubuntu-latest
@@ -38,7 +35,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Prepare Developer.xcconfig
       run: cp Config/iOS/Developer.xcconfig.eduvpn-template Config/iOS/Developer.xcconfig
     - name: Prepare config.json
@@ -54,7 +51,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Prepare Developer-macos.xcconfig
       run: cp Config/Mac/Developer-macos.xcconfig.eduvpn-template Config/Mac/Developer-macos.xcconfig
     - name: Prepare config.json
