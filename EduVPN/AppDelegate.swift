@@ -50,6 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Dummy 4
         let window = NSApp.windows[0]
         if let navigationController = window.rootViewController as? NavigationController {
             environment = Environment(navigationController: navigationController)
