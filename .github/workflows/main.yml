@@ -50,9 +50,7 @@ jobs:
     - name: Prepare config.json
       run: cp Config/iOS/config-eduvpn_new_discovery.json Config/iOS/config.json
     - name: Build for Generic iOS device
-      run: |
-        which go
-        xcodebuild build -scheme EduVPN-iOS -workspace EduVPN.xcworkspace -sdk iphoneos -destination generic/platform=iOS -skip-testing EduVPN-UITests-iOS  -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO
+      run: which go && xcodebuild build -scheme EduVPN-iOS -workspace EduVPN.xcworkspace -sdk iphoneos -destination generic/platform=iOS -skip-testing EduVPN-UITests-iOS  -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO
   build-macos:
     name: Build macOS target
     runs-on: macOS-latest
@@ -72,7 +70,5 @@ jobs:
     - name: Prepare config.json
       run: cp Config/Mac/config-eduvpn_new_discovery.json Config/Mac/config.json
     - name: Run MacOS build
-      run: |
-        which go
-        xcodebuild build -scheme EduVPN-macOS -workspace EduVPN.xcworkspace -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
+      run: which go && xcodebuild build -scheme EduVPN-macOS -workspace EduVPN.xcworkspace -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 
