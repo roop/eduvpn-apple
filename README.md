@@ -177,3 +177,4 @@ Then:
  5. Click on Product > Test
 
 Do not use the macOS machine when the test is running.
+dummy11
