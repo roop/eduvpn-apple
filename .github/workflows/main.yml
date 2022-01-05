@@ -12,11 +12,11 @@ on:
 
 jobs:
   remind:
-    name: Changelog Reminder
+    name: Check changelog
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       - name: Check for update to CHANGES.md
         uses: brettcannon/check-for-changed-files@v1
         with:
@@ -33,7 +33,6 @@ jobs:
   build-ios:
     name: Build iOS target
     runs-on: macOS-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: List available Xcode versions
@@ -47,12 +46,11 @@ jobs:
     - name: Prepare config.json
       run: cp Config/iOS/config-eduvpn_new_discovery.json Config/iOS/config.json
     - name: Build for Generic iOS device
-      run: xcodebuild build -scheme EduVPN-iOS -workspace EduVPN.xcworkspace -sdk iphoneos -destination generic/platform=iOS -skip-testing EduVPN-UITests-iOS | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -scheme EduVPN-iOS -workspace EduVPN.xcworkspace -sdk iphoneos -destination generic/platform=iOS -skip-testing EduVPN-UITests-iOS  -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO | xcpretty && exit ${PIPESTATUS[0]}
 
   build-macos:
     name: Build macOS target
     runs-on: macOS-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode
@@ -65,3 +63,4 @@ jobs:
       run: cp Config/Mac/config-eduvpn_new_discovery.json Config/Mac/config.json
     - name: Run MacOS build
       run: xcodebuild build -scheme EduVPN-macOS -workspace EduVPN.xcworkspace -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO | xcpretty && exit ${PIPESTATUS[0]}
+
