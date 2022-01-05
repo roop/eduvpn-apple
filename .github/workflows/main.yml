@@ -42,7 +42,9 @@ jobs:
       with:
         xcode-version: latest-stable
     - name: Install Go
-      run: brew install go@1.16
+      run: |
+        brew install go@1.16
+        echo 'export PATH="/usr/local/opt/go@1.16/bin:/opt/homebrew/opt/go@1.16/bin:$PATH"' >> /Users/runner/.bash_profile
     - name: Prepare Developer.xcconfig
       run: cp Config/iOS/Developer.xcconfig.eduvpn-template Config/iOS/Developer.xcconfig
     - name: Prepare config.json
@@ -59,7 +61,9 @@ jobs:
       with:
         xcode-version: latest-stable
     - name: Install Go
-      run: brew install go@1.16
+      run: |
+        brew install go@1.16
+        echo 'export PATH="/usr/local/opt/go@1.16/bin:/opt/homebrew/opt/go@1.16/bin:$PATH"' >> /Users/runner/.bash_profile
     - name: Prepare Developer-macos.xcconfig
       run: cp Config/Mac/Developer-macos.xcconfig.eduvpn-template Config/Mac/Developer-macos.xcconfig
     - name: Prepare config.json
