@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Support for minisign pre-hashed signatures #427
+- Dummy 8
 
 ## 2.2.4
 
