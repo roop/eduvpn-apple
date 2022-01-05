@@ -41,6 +41,8 @@ jobs:
       uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable
+    - name: Install Go
+      run: brew install go@1.16
     - name: Prepare Developer.xcconfig
       run: cp Config/iOS/Developer.xcconfig.eduvpn-template Config/iOS/Developer.xcconfig
     - name: Prepare config.json
@@ -56,6 +58,8 @@ jobs:
       uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable
+    - name: Install Go
+      run: brew install go@1.16
     - name: Prepare Developer-macos.xcconfig
       run: cp Config/Mac/Developer-macos.xcconfig.eduvpn-template Config/Mac/Developer-macos.xcconfig
     - name: Prepare config.json
